@@ -32,14 +32,11 @@ while [[ "$#" -gt 0 ]]; do
 done
 
 
-### SELECTING COMPONENTS IN CLUSTER
-# Define available components
-AVAILABLE_COMPONENTS="AMBARI,HDFS,ZOOKEEPER,YARN,MAP-REDUCE,HIVE,TEZ,HBASE,INFRA-SOLR,SPARK2,KAFKA,RANGER,RANGER-KMS,OOZIE,DRUID,SQOOP,KNOX"
-
-# Prompt user for input
-echo "Enter the components you want to include in the cluster (comma-separated):"
-echo "Available components are: $AVAILABLE_COMPONENTS"
-read -p "CLUSTER_COMPONENTS: " CLUSTER_COMPONENTS
+# Ensure CLUSTER_COMPONENTS is defined
+if [ -z "$CLUSTER_COMPONENTS" ]; then
+  echo "Error: CLUSTER_COMPONENTS is not defined."
+  exit 1
+fi
 
 # Convert the user input to an array
 IFS=',' read -r -a SELECTED_COMPONENTS <<< "$CLUSTER_COMPONENTS"
@@ -69,10 +66,28 @@ done
 
 
 
-
-
 # Build the Jenkins job URL
 JOB_URL="$JENKINS_URL/job/$JOB_NAME/buildWithParameters"
+echo """
+curl -X POST "$JOB_URL" \
+  --user "$JENKINS_USER:$JENKINS_TOKEN" \
+  --data-urlencode "Name=$PARAM_NAME" \
+  --data-urlencode "ambariVersion=$PARAM_AMBARI_VERSION" \
+  --data-urlencode "odpVersion=$PARAM_ODP_VERSION" \
+  --data-urlencode "user_name=$PARAM_SLACK_USER" \
+  --data-urlencode "initial_user=$PARAM_INITIAL_USER" \
+  --data-urlencode "CLUSTER_COMPONENTS=$CLUSTER_COMPONENTS" \
+  --data-urlencode "NODE_COUNT=$NODE_COUNT" \
+  --data-urlencode "OS_type=$OS_TYPE" \
+  --data-urlencode "JAVA_Version=$JAVA_VERSION" \
+  --data-urlencode "Kerberos=$KERBEROS" \
+  --data-urlencode "USER_KEY=$(echo -n "'$PARAM_USER_KEY'")" \
+  --data-urlencode "USER_CERT=$(echo -n "'$PARAM_USER_CERT'")" \
+  --data-urlencode "IPAddresses_M=$(echo -n "'$IP_ADDRESS_LIST'")"
+"""
+
+
+
 
 # Send the POST request to trigger the Jenkins job
 curl -X POST "$JOB_URL" \
@@ -80,12 +95,15 @@ curl -X POST "$JOB_URL" \
   --data-urlencode "Name=$PARAM_NAME" \
   --data-urlencode "ambariVersion=$PARAM_AMBARI_VERSION" \
   --data-urlencode "odpVersion=$PARAM_ODP_VERSION" \
-  --data-urlencode "InitialUser=$PARAM_INITIAL_USER" \
-  --data-urlencode "userKey=$PARAM_USER_KEY" \
-  --data-urlencode "userCert=$PARAM_USER_CERT" \ 
+  --data-urlencode "user_name=$PARAM_SLACK_USER" \
+  --data-urlencode "initial_user=$PARAM_INITIAL_USER" \
   --data-urlencode "CLUSTER_COMPONENTS=$CLUSTER_COMPONENTS" \
-  --data-urlencode "OS_type=$OS_TYPE" \
-  --data-urlencode "Kerberos=$KERBEROS" \
-  --data-urlencode "JAVA_Version=$JAVA_VERSION" \
   --data-urlencode "NODE_COUNT=$NODE_COUNT" \
-  --data-urlencode "IPAddresses_M=$IP_ADDRESS_LIST" \
+  --data-urlencode "OS_type=$OS_TYPE" \
+  --data-urlencode "JAVA_Version=$JAVA_VERSION" \
+  --data-urlencode "Kerberos=$KERBEROS" \
+  --data-urlencode "USER_KEY=$(echo -n "'$PARAM_USER_KEY'")" \
+  --data-urlencode "USER_CERT=$(echo -n "'$PARAM_USER_CERT'")" \
+  --data-urlencode "IPAddresses_M=$(echo -n "'$IP_ADDRESS_LIST'")"
+
+

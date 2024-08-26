@@ -14,10 +14,20 @@ PARAM_AMBARI_VERSION="2.7.6.0-1"
 PARAM_ODP_VERSION="3.2.2.0-2"
 KERBEROS="Yes"  # It can be either Yes or No
 
+
+
+# Define available & needed components
+AVAILABLE_COMPONENTS="AMBARI,HDFS,ZOOKEEPER,YARN,MAP-REDUCE,HIVE,TEZ,HBASE,INFRA-SOLR,SPARK2,KAFKA,RANGER,RANGER-KMS,OOZIE,DRUID,SQOOP,KNOX"
+
+# Enter the components you want to include in the cluster (comma-separated):"
+CLUSTER_COMPONENTS="AMBARI,HDFS,ZOOKEEPER,YARN,MAP-REDUCE"
+
+
 OS_TYPE="RHEL8_PY3.11"    # The Valid values are Centos7,Ubuntu20.04,Ubuntu20.04_PY311,RHEL8_MYSQL8,RHEL8_PY3.11
 JAVA_VERSION="11"         # Can be 8 or 11
 
-NODE_COUNT='3'
+
+NODE_COUNT="3"
 IP_ADDRESS_LIST=''   # comma separated list of hosts to deploy cluster on
 
 
@@ -31,9 +41,10 @@ IP_ADDRESS_LIST=''   # comma separated list of hosts to deploy cluster on
 
 
 PARAM_INITIAL_USER="senthilkumar"
+PARAM_SLACK_USER="senthilkumar"
 
 # Default private key and user certificate
-PARAM_USER_KEY='-----BEGIN OPENSSH PRIVATE KEY-----
+PARAM_USER_KEY="-----BEGIN OPENSSH PRIVATE KEY-----
 b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABlwAAAAdzc2gtcn
 NhAAAAAwEAAQAAAYEA00k+dE1dBufQmbGIs7YMvxwvEmKMUZjokcR1z+mrvlALIS/fKQl1
 2NLL0PyUxVkaqc8g9tBsfb4uHl3rLvz8AElntC4Pd3oO0rrRUVWVCFs2rPUL8iJy0v543O
@@ -71,8 +82,8 @@ esFfXjJYzp+hOubxEKUvj9uqoQdzdOqN4VFnNVDKahGArb+ii6ipS53T0Uc0tVSV3ryUSm
 9+9A7cKLS04NAKq82/NMXMjbQahmPNxSm3fhIcMyTLms3kvD7qxAUVNt19RqZFkHi/JPqa
 EzDljYoTvRNL0AlZ293dGhhbXNhZGFzaXZhbUBNQlAtN05MS1A0LUdXUy5sb2NhbAEC
 AwQFBg==
------END OPENSSH PRIVATE KEY-----'
+-----END OPENSSH PRIVATE KEY-----"
 
-PARAM_USER_CERT='ssh-rsa-cert-v01@openssh.com AAAAHHNzaC1yc2EtY2VyMDFAb3BlbnNzaC5jb20AAAAgCpqKCFHB6zxWwmVJmV0orFdSKnFeMh7fOAZcId0LK0cAAAAhY29tcHV0ZXJzZXJ2aWNlc0Bzbnl0aC5jb20BAgMEBQ=='
+PARAM_USER_CERT="ssh-rsa-cert-v01@openssh.com AAAAHHNzaC1yc2EtY2VyMDFAb3BlbnNzaC5jb20AAAAgCpqKCFHB6zxWwmVJmV0orFdSKnFeMh7fOAZcId0LK0cAAAAhY29tcHV0ZXJzZXJ2aWNlc0Bzbnl0aC5jb20BAgMEBQ=="
 
 
